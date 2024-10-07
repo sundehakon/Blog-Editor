@@ -22,23 +22,39 @@ fn get_blogs() -> Result<Vec<Blog>, Box<dyn std::error::Error>> {
 
 fn add_blog(blog: Blog) -> Result<(), Box<dyn std::error::Error>> {
     let url = "https://portfolioapi-hysa.onrender.com/Blogs";
+
+    let mut username = String::new();
+    let mut password = String::new();
+
+    print!("Enter username: ");
+    io::stdout().flush().unwrap();
+    io::stdin().read_line(&mut username).unwrap();
+    let username = username.trim();
+    
+    print!("Enter password: ");
+    io::stdout().flush().unwrap();
+    io::stdin().read_line(&mut password).unwrap();
+    let password = password.trim();
+
     let client = reqwest::blocking::Client::new();
-    let response = client.post(url)
+    let response = client
+        .post(url)
         .json(&blog)
+        .basic_auth(username, Some(password))
         .send()?;
 
-        if response.status() == StatusCode::OK {
-            println!("Blog added successfully!");
-        } else {
-            println!("Failed to add blog. Status: {:?}", response.status());
-            println!("Response Body: {:?}", response.text()?);
-        }
+    if response.status() == StatusCode::CREATED {
+        println!("Blog added successfully!");
+    } else {
+        println!("Failed to add blog. Status: {:?}", response.status());
+        println!("Response Body: {:?}", response.text()?);
+    }
 
     Ok(())
 }
 
 fn main() {
-    println!("Welcome to sundehakon blog editor!");
+    println!("Welcome to blog-editor!");
 
     loop {
         println!("Choose an option:");
@@ -61,7 +77,7 @@ fn main() {
                 io::stdin().read_line(&mut title).unwrap();
                 title = title.trim().to_string(); 
 
-                print!("Write blog content: ");
+                print!("Enter content: ");
                 io::stdout().flush().unwrap();
                 io::stdin().read_line(&mut content).unwrap();
                 content = content.trim().to_string();

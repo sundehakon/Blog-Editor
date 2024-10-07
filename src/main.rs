@@ -38,48 +38,70 @@ fn add_blog(blog: Blog) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn main() {
-    match get_blogs() {
-        Ok(blogs) => {
-            for blog in blogs {
-                println!("Title: {}", blog.title);
-                println!("Author: {}", blog.author);
-                println!("Content: {}", blog.content);
-                println!("Date: {}", blog.date);
-                println!("----------------------");
+    println!("Welcome to sundehakon blog editor!");
+
+    loop {
+        println!("Choose an option:");
+        println!("1. Add a new blog");
+        println!("2. View all blogs");
+        println!("3. Exit");
+
+        let mut choice = String::new();
+        io::stdin().read_line(&mut choice).expect("Failed to read line");
+
+        match choice.trim() {
+            "1" => {
+                let mut title = String::new();
+                let author = "Håkon Sunde";
+                let mut content = String::new();
+                let mut date = String::new();
+
+                print!("Enter title: ");
+                io::stdout().flush().unwrap(); 
+                io::stdin().read_line(&mut title).unwrap();
+                title = title.trim().to_string(); 
+
+                print!("Write blog content: ");
+                io::stdout().flush().unwrap();
+                io::stdin().read_line(&mut content).unwrap();
+                content = content.trim().to_string();
+
+                print!("Enter blog date (YYYY-MM-DD): ");
+                io::stdout().flush().unwrap();
+                io::stdin().read_line(&mut date).unwrap();
+                date = date.trim().to_string();
+
+                let new_blog = Blog {
+                    _id: None,  
+                    title,
+                    author: author.to_string(),
+                    content,
+                    date,
+                };
+
+                if let Err(e) = add_blog(new_blog) {
+                    eprintln!("Error adding blog: {}", e);
+                }
             }
-        },
-        Err(e) => eprintln!("Error fetching blogs: {}", e),
-    }
-
-    let mut title = String::new();
-    let author = "Håkon Sunde";
-    let mut content = String::new();
-    let mut date = String::new();
-
-    print!("Enter title: ");
-    io::stdout().flush().unwrap(); 
-    io::stdin().read_line(&mut title).unwrap();
-    title = title.trim().to_string(); 
-
-    print!("Write blog content: ");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut content).unwrap();
-    content = content.trim().to_string();
-
-    print!("Enter blog date (YYYY-MM-DD): ");
-    io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut date).unwrap();
-    date = date.trim().to_string();
-
-    let new_blog = Blog {
-        _id: None,  
-        title,
-        author: author.to_string(),
-        content,
-        date,
-    };
-
-    if let Err(e) = add_blog(new_blog) {
-        eprintln!("Error adding blog: {}", e);
+            "2" => {
+                match get_blogs() {
+                    Ok(blogs) => {
+                        for blog in blogs {
+                            println!("Title: {}", blog.title);
+                            println!("Author: {}", blog.author);
+                            println!("Content: {}", blog.content);
+                            println!("Date: {}", blog.date);
+                            println!("----------------------");
+                        }
+                    },
+                    Err(e) => eprintln!("Error fetching blogs: {}", e),
+                }
+            }
+            "3" => {
+                println!("Goodbye!");
+                break;
+            }
+            _ => println!("Invalid option. Please try again.")
+        }
     }
 }

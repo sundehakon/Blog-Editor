@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use reqwest::{self, StatusCode};
 use std::io::{self, Write};
+use rpassword::read_password;
 
 #[derive(Deserialize, Serialize, Debug)]
 struct Blog {
@@ -24,7 +25,6 @@ fn delete_blog(blog_id: &str) -> Result<(), Box<dyn std::error::Error>> {
     let url = format!("https://portfolioapi-hysa.onrender.com/Blogs/{}", blog_id);
 
     let mut username = String::new();
-    let mut password = String::new();
 
     print!("Enter username: ");
     io::stdout().flush().unwrap();
@@ -33,8 +33,8 @@ fn delete_blog(blog_id: &str) -> Result<(), Box<dyn std::error::Error>> {
 
     print!("Enter password: ");
     io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut password).unwrap();
-    let password = password.trim();
+    let password = read_password().unwrap(); 
+    println!(); 
 
     let client = reqwest::blocking::Client::new();
     let response = client
@@ -56,7 +56,6 @@ fn add_blog(blog: Blog) -> Result<(), Box<dyn std::error::Error>> {
     let url = "https://portfolioapi-hysa.onrender.com/Blogs";
 
     let mut username = String::new();
-    let mut password = String::new();
 
     print!("Enter username: ");
     io::stdout().flush().unwrap();
@@ -65,8 +64,8 @@ fn add_blog(blog: Blog) -> Result<(), Box<dyn std::error::Error>> {
     
     print!("Enter password: ");
     io::stdout().flush().unwrap();
-    io::stdin().read_line(&mut password).unwrap();
-    let password = password.trim();
+    let password = read_password().unwrap(); 
+    println!(); 
 
     let client = reqwest::blocking::Client::new();
     let response = client
@@ -101,7 +100,7 @@ fn main() {
         match choice.trim() {
             "1" => {
                 let mut title = String::new();
-                let author = "Håkon Sunde";
+                let author = "Håkon Sunde"; 
                 let mut content = String::new();
                 let mut date = String::new();
 
@@ -135,12 +134,8 @@ fn main() {
             "2" => {
                 match get_blogs() {
                     Ok(blogs) => {
-                        for blog in blogs {
-                            println!("Title: {}", blog.title);
-                            println!("Author: {}", blog.author);
-                            println!("Content: {}", blog.content);
-                            println!("Date: {}", blog.date);
-                            println!("----------------------");
+                        for (index, blog) in blogs.iter().enumerate() {
+                            println!("{}. {} by {} on {}", index + 1, blog.title, blog.author, blog.date);
                         }
                     },
                     Err(e) => eprintln!("Error fetching blogs: {}", e),

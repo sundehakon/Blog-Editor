@@ -84,6 +84,8 @@ fn add_blog(blog: Blog) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+// TODO: Write function for managing comments
+
 fn main() {
     println!("Welcome to blog-editor!");
 

@@ -134,8 +134,12 @@ fn main() {
             "2" => {
                 match get_blogs() {
                     Ok(blogs) => {
-                        for (index, blog) in blogs.iter().enumerate() {
-                            println!("{}. {} by {} on {}", index + 1, blog.title, blog.author, blog.date);
+                        for blog in blogs {
+                            println!("Title: {}", blog.title);
+                            println!("Author: {}", blog.author);
+                            println!("Content: {}", blog.content);
+                            println!("Date: {}", blog.date);
+                            println!("----------------------");
                         }
                     },
                     Err(e) => eprintln!("Error fetching blogs: {}", e),

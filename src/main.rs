@@ -15,14 +15,14 @@ struct Blog {
 type BlogsResponse = Vec<Blog>;
 
 fn get_blogs() -> Result<Vec<Blog>, Box<dyn std::error::Error>> {
-    let url = "https://portfolioapi-hysa.onrender.com/Blogs";
+    let url = "https://api.sundehakon.tech/Blogs";
     let response = reqwest::blocking::get(url)?.json::<BlogsResponse>()?;
     
     Ok(response)
 }
 
 fn delete_blog(blog_id: &str) -> Result<(), Box<dyn std::error::Error>> {
-    let url = format!("https://portfolioapi-hysa.onrender.com/Blogs/{}", blog_id);
+    let url = format!("https://api.sundehakon.tech/Blogs/{}", blog_id);
 
     let mut username = String::new();
 
@@ -53,7 +53,7 @@ fn delete_blog(blog_id: &str) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn add_blog(blog: Blog) -> Result<(), Box<dyn std::error::Error>> {
-    let url = "https://portfolioapi-hysa.onrender.com/Blogs";
+    let url = "https://api.sundehakon.tech/Blogs";
 
     let mut username = String::new();
 

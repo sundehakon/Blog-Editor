@@ -89,9 +89,9 @@ fn main() {
 
     loop {
         println!("Choose an option:");
-        println!("1. Create a new blog");
-        println!("2. View all blogs");
-        println!("3. Delete blog by selecting number");
+        println!("1. Create a new blog post");
+        println!("2. View all blog posts");
+        println!("3. Delete blog post by index");
         println!("4. Exit");
 
         let mut choice = String::new();
